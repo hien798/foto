@@ -3,6 +3,8 @@ import 'package:foto/widgets/widget.dart';
 
 class TextItem<T extends Object> extends StatefulWidget {
   final String? initialText;
+  final Offset? initialOffset;
+  final double? initialScale;
   final ValueChanged<String>? onChanged;
   final GestureTapCallback? onTap;
   final GestureTapCallback? onDoubleTap;
@@ -19,6 +21,8 @@ class TextItem<T extends Object> extends StatefulWidget {
   const TextItem({
     Key? key,
     this.initialText,
+    this.initialOffset,
+    this.initialScale,
     this.onChanged,
     this.onTap,
     this.onDoubleTap,
@@ -54,6 +58,8 @@ class _TextItemState extends State<TextItem> {
   @override
   Widget build(BuildContext context) {
     return EditorItem(
+      initialOffset: widget.initialOffset,
+      initialScale: widget.initialScale,
       child: Text(
         _text,
         style: _style,

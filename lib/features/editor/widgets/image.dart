@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:foto/resources/resource.dart';
 import 'package:foto/widgets/widget.dart';
 
-class ImageItem_<T extends Object> extends StatefulWidget {
-  final String? initialSticker;
+class ImageItem<T extends Object> extends StatefulWidget {
+  final String? initialImage;
+  final Offset? initialOffset;
+  final double? initialScale;
   final ValueChanged<String>? onChanged;
   final GestureTapCallback? onTap;
   final GestureTapCallback? onDoubleTap;
@@ -17,9 +19,11 @@ class ImageItem_<T extends Object> extends StatefulWidget {
   final GestureScaleEndCallback? onScaleEnd;
   final T? data;
 
-  const ImageItem_({
+  const ImageItem({
     Key? key,
-    this.initialSticker,
+    this.initialImage,
+    this.initialOffset,
+    this.initialScale,
     this.onChanged,
     this.onTap,
     this.onDoubleTap,
@@ -35,20 +39,22 @@ class ImageItem_<T extends Object> extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<ImageItem_> createState() => _ImageItem_State();
+  State<ImageItem> createState() => _ImageItemState();
 }
 
-class _ImageItem_State extends State<ImageItem_> {
+class _ImageItemState extends State<ImageItem> {
   String _sticker = Images.sticker_cat_2;
   @override
   void initState() {
-    _sticker = widget.initialSticker ?? Images.sticker_cat_2;
+    _sticker = widget.initialImage ?? Images.sticker_cat_2;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return EditorItem(
+      initialOffset: widget.initialOffset,
+      initialScale: widget.initialScale,
       child: SizedBox(
         width: 100,
         height: 100,

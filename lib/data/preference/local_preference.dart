@@ -10,7 +10,7 @@ class UserLocalStorage {
 
   loadSetting() async {
     String? locale = (await _storage.read(key: 'setting/locale')) ?? 'en_US';
-    String? theme = (await _storage.read(key: 'setting/theme')) ?? 'light';
+    String? theme = (await _storage.read(key: 'setting/theme')) ?? 'dark';
     String? font = (await _storage.read(key: 'setting/font')) ?? 'Gilroy';
     _settingModel = AppSettingModel(
       locale: locale,
@@ -22,7 +22,7 @@ class UserLocalStorage {
   updateSetting(AppSettingModel model) {
     _settingModel = model;
     _scheduleSave('setting/locale', model.locale ?? 'en_US');
-    _scheduleSave('setting/theme', model.theme ?? 'light');
+    _scheduleSave('setting/theme', model.theme ?? 'dark');
     _scheduleSave('setting/font', model.font ?? 'Gilroy');
   }
 

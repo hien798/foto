@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return BaseLayout(
-      style: LayoutStyle.dark,
+      style: LayoutStyle.light,
       child: Column(
         children: [
           CommonAppBar(title: 'Foto'),

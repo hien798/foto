@@ -2,12 +2,8 @@ import 'package:dio/dio.dart';
 import '../../share/share.dart';
 import '../data.dart';
 
-Environment env = Environment.dev;
-
 class AppApi {
-  static String basePath = env != Environment.dev
-      ? 'https://api.superlucky.io/api/'
-      : 'https://beta.api.superlucky.io/api/';
+  static String basePath = 'https://beta.api.superlucky.io/api/';
 
   Dio _dio = Dio();
 

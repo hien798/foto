@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:foto/features/feature.dart';
 import 'package:foto/share/share.dart';
@@ -13,6 +15,7 @@ class SelectImageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseLayout(
+      style: LayoutStyle.light,
       child: Column(
         children: [
           CommonAppBar(title: 'Choose image'),
@@ -32,8 +35,16 @@ class SelectImageScreen extends StatelessWidget {
                               _navigate(path!);
                             }
                           },
-                          child: Text('Camera'),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.camera_alt),
+                              SizedBox(height: 8),
+                              Text('Camera'),
+                            ],
+                          ),
                           style: TextButton.styleFrom(
+                            backgroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
                               side: BorderSide(),
@@ -53,8 +64,16 @@ class SelectImageScreen extends StatelessWidget {
                               _navigate(path!);
                             }
                           },
-                          child: Text('Gallery'),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.photo_library_sharp),
+                              SizedBox(height: 8),
+                              Text('Gallery'),
+                            ],
+                          ),
                           style: TextButton.styleFrom(
+                            backgroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
                               side: BorderSide(),
@@ -73,9 +92,14 @@ class SelectImageScreen extends StatelessWidget {
     );
   }
 
-  void _navigate(String path) {
+  void _navigate(String path) async {
+    File file = File(path);
+    var decodedImage = await decodeImageFromList(file.readAsBytesSync());
+    final size =
+        Size(decodedImage.width.toDouble(), decodedImage.height.toDouble());
     Future.delayed(Duration(milliseconds: 500), () {
-      pushReplacementNamed(EditorScreen.route, arguments: {'image': path});
+      pushReplacementNamed(EditorScreen.route,
+          arguments: {'image': path, 'size': size});
     });
   }
 

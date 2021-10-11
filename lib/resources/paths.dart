@@ -11,4 +11,7 @@ class Images {
   static const sticker_cat_3 = _prefix + 'sticker/sticker_cat_3.png';
   static const sticker_cat_4 = _prefix + 'sticker/sticker_cat_4.png';
   static const sticker_cat_5 = _prefix + 'sticker/sticker_cat_5.png';
+
+  /// Image
+  static const image_demo = _prefix + 'images/image_demo.jpg';
 }

@@ -33,7 +33,13 @@ RouteFactory routes(App app) {
         break;
       case EditorScreen.route:
         final image = arguments['image'];
-        screen = EditorScreen(image);
+        final size = arguments['size'];
+        screen = MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => TrashCubit()),
+          ],
+          child: EditorScreen(image, size),
+        );
         break;
       default:
         screen = HomeScreen();
