@@ -1,0 +1,21 @@
+{
+  "ui": {
+    "app_name": "Super Lucky",
+    "text_save" : "Lưu",
+    "text_saved" : "Đã lưu",
+    "text_done" : "Xong",
+    "text_ok" : "OK",
+    "text_cancel" : "Hủy",
+    "text_yes" : "Được",
+    "text_no" : "Không",
+    "text_back" : "Quay lại",
+    "text_gallery" : "Thư viện",
+    "text_camera" : "Máy ảnh",
+    "text_undo" : "Hoàn tác",
+    "text_redo" : "Làm lại",
+    "text_copy" : "Sao chép",
+    "text_copied" : "Đã saochesp",
+    "text_apply" : "Áp dụng",
+    "text_error" : "Lỗi"
+  }
+}
