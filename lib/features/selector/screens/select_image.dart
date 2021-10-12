@@ -33,7 +33,7 @@ class SelectImageScreen extends StatelessWidget {
                         aspectRatio: 1,
                         child: TextButton(
                           onPressed: () async {
-                            final path = await _takePhoto();
+                            final path = await takePhoto();
                             if (!path.isNullOrEmpty) {
                               _navigate(context, path!);
                             }
@@ -62,7 +62,7 @@ class SelectImageScreen extends StatelessWidget {
                         aspectRatio: 1,
                         child: TextButton(
                           onPressed: () async {
-                            final path = await _pickImage();
+                            final path = await pickImage();
                             if (!path.isNullOrEmpty) {
                               _navigate(context, path!);
                             }
@@ -103,41 +103,8 @@ class SelectImageScreen extends StatelessWidget {
       updateTime: now,
     );
     BlocProvider.of<ProjectCubit>(context).onAddProject(model);
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(Duration(milliseconds: 200), () {
       pushReplacementNamed(EditorScreen.route, arguments: {'model': model});
     });
-  }
-
-  Future<String?> _pickImage() async {
-    try {
-      final permission = await checkPermission(Permission.photos);
-      if (!permission) return null;
-      final ImagePicker _picker = ImagePicker();
-      final XFile? image = await _picker.pickImage(
-        source: ImageSource.gallery,
-        maxHeight: 1600,
-        maxWidth: 900,
-        imageQuality: 100,
-      );
-      if (image != null) {
-        final size = await image.length();
-        /** Check image size
-            if (size >= 1048576) {
-            NotifyDialog.showErrors(title: 'Error', error: 'Image too large!');
-            } else {}
-         **/
-      }
-      return image?.path;
-    } catch (error) {
-      NotifyDialog.showErrors(title: 'Error', error: error.toString());
-    }
-    return null;
-  }
-
-  Future<String?> _takePhoto() async {
-    final permission = await checkPermission(Permission.camera);
-    if (!permission) return null;
-    final rs = await pushNamed(CameraScreen.route);
-    return rs as String?;
   }
 }

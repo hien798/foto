@@ -64,7 +64,7 @@ android {
             minifyEnabled true
             applicationVariants.all { variant ->
                 variant.outputs.all {
-                    outputFileName = "foto${variant.buildType.name}_${defaultConfig.versionName}+${defaultConfig.versionCode}.apk"
+                    outputFileName = "foto_${variant.buildType.name}_${defaultConfig.versionName}+${defaultConfig.versionCode}.apk"
                 }
             }
         }

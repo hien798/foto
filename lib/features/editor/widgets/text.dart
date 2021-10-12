@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:foto/bloc/bloc.dart';
+import 'package:foto/models/editor/editor.dart';
+import 'package:foto/resources/resource.dart';
+import 'package:foto/share/share.dart';
 import 'package:foto/widgets/widget.dart';
 
 class TextItem<T extends Object> extends StatefulWidget {
-  final String? initialText;
+  final String? text;
   final Offset? initialOffset;
   final double? initialScale;
   final ValueChanged<String>? onChanged;
@@ -16,11 +21,12 @@ class TextItem<T extends Object> extends StatefulWidget {
   final GestureScaleStartCallback? onScaleStart;
   final GestureScaleUpdateCallback? onScaleUpdate;
   final GestureScaleEndCallback? onScaleEnd;
+  final ValueChanged<ScaleOffsetModel>? onScaleOffsetUpdated;
   final T? data;
 
   const TextItem({
     Key? key,
-    this.initialText,
+    this.text,
     this.initialOffset,
     this.initialScale,
     this.onChanged,
@@ -34,54 +40,50 @@ class TextItem<T extends Object> extends StatefulWidget {
     this.onScaleStart,
     this.onScaleUpdate,
     this.onScaleEnd,
+    this.onScaleOffsetUpdated,
     this.data,
   }) : super(key: key);
 
   @override
-  _TextItemState createState() => _TextItemState();
+  State<TextItem> createState() => _TextItemState();
 }
 
 class _TextItemState extends State<TextItem> {
-  late String _text;
-  TextStyle _style = TextStyle(
-    fontSize: 30,
-    fontWeight: FontWeight.w600,
-    color: Colors.red,
-  );
+  late ScaleOffsetCubit _cubit;
 
   @override
   void initState() {
-    _text = widget.initialText ?? 'Text';
+    _cubit = ScaleOffsetCubit(
+      widget.initialScale,
+      widget.initialOffset?.dx,
+      widget.initialOffset?.dy,
+    );
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return EditorItem(
-      child: Text(
-        _text,
-        style: _style,
-        textAlign: TextAlign.center,
+    return BlocProvider.value(
+      value: _cubit,
+      child: EditorItem(
+        child: Text(widget.text ?? '', style: TextStyle(
+          color: Colors.black,
+          fontSize: 20,
+          fontWeight: FontWeight.w500,
+        ),),
+        onTap: widget.onTap,
+        onDoubleTap: widget.onDoubleTap,
+        onLongDragStarted: widget.onLongDragStarted,
+        onLongDragUpdate: widget.onLongDragUpdate,
+        onLongDraggableCanceled: widget.onLongDraggableCanceled,
+        onLongDragEnd: widget.onLongDragEnd,
+        onLongDragCompleted: widget.onLongDragCompleted,
+        onScaleStart: widget.onScaleStart,
+        onScaleUpdate: widget.onScaleUpdate,
+        onScaleEnd: widget.onScaleEnd,
+        onScaleOffsetUpdated: widget.onScaleOffsetUpdated,
+        data: widget.data,
       ),
-      onTap: _onTap,
-      onDoubleTap: widget.onDoubleTap,
-      onLongDragStarted: () {
-        print('Start');
-      },
-      onLongDragUpdate: widget.onLongDragUpdate,
-      onLongDraggableCanceled: widget.onLongDraggableCanceled,
-      onLongDragEnd: widget.onLongDragEnd,
-      onLongDragCompleted: widget.onLongDragCompleted,
-      onScaleStart: widget.onScaleStart,
-      onScaleUpdate: widget.onScaleUpdate,
-      onScaleEnd: widget.onScaleEnd,
-      data: widget.data,
     );
-  }
-
-  void _onTap() {
-    // Todo: Implement Tap to open text editor
-    widget.onTap?.call();
-    // Also onChanged;
   }
 }

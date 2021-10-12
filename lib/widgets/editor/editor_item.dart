@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:foto/bloc/bloc.dart';
+import 'package:foto/models/model.dart';
 import 'package:foto/share/share.dart';
 
 class EditorItem<T extends Object> extends StatefulWidget {
@@ -15,8 +16,7 @@ class EditorItem<T extends Object> extends StatefulWidget {
   final GestureScaleStartCallback? onScaleStart;
   final GestureScaleUpdateCallback? onScaleUpdate;
   final GestureScaleEndCallback? onScaleEnd;
-  final ValueChanged<double>? onScaleUpdated;
-  final Tuple2Changed<double, double>? onOffsetUpdated;
+  final ValueChanged<ScaleOffsetModel>? onScaleOffsetUpdated;
   final T? data;
 
   const EditorItem({
@@ -32,8 +32,7 @@ class EditorItem<T extends Object> extends StatefulWidget {
     this.onScaleStart,
     this.onScaleUpdate,
     this.onScaleEnd,
-    this.onScaleUpdated,
-    this.onOffsetUpdated,
+    this.onScaleOffsetUpdated,
     this.data,
   }) : super(key: key);
 
@@ -66,12 +65,11 @@ class _EditorItemState extends State<EditorItem> {
             onDragStarted: widget.onLongDragStarted,
             onDragUpdate: (dt) {
               widget.onLongDragUpdate?.call(dt);
-              widget.onOffsetUpdated
-                  ?.call(state.dx + dt.delta.dx, state.dy + dt.delta.dy);
-              _cubit.onUpdate(
-                dx: state.dx + dt.delta.dx,
-                dy: state.dy + dt.delta.dy,
-              );
+              final dx = state.dx + dt.delta.dx;
+              final dy = state.dy + dt.delta.dy;
+              widget.onScaleOffsetUpdated
+                  ?.call(ScaleOffsetModel(scale: state.scale, dx: dx, dy: dy));
+              _cubit.onUpdate(dx: dx, dy: dy);
             },
             onDragEnd: widget.onLongDragEnd,
             onDragCompleted: widget.onLongDragCompleted,
@@ -86,14 +84,12 @@ class _EditorItemState extends State<EditorItem> {
               },
               onScaleUpdate: (dt) {
                 widget.onScaleUpdate?.call(dt);
-                widget.onScaleUpdated?.call(_initScale * dt.scale);
-                widget.onOffsetUpdated
-                    ?.call(_initDx + dt.delta.dx, _initDy + dt.delta.dy);
-                _cubit.onUpdate(
-                  scale: _initScale * dt.scale,
-                  dx: _initDx + dt.delta.dx,
-                  dy: _initDy + dt.delta.dy,
-                );
+                final scale = _initScale * dt.scale;
+                final dx = _initDx + dt.delta.dx;
+                final dy = _initDy + dt.delta.dy;
+                widget.onScaleOffsetUpdated
+                    ?.call(ScaleOffsetModel(scale: scale, dx: dx, dy: dy));
+                _cubit.onUpdate(scale: scale, dx: dx, dy: dy);
               },
               onScaleEnd: (dt) {
                 widget.onScaleEnd?.call(dt);

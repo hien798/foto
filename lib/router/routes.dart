@@ -28,9 +28,6 @@ RouteFactory routes(App app) {
       case SelectImageScreen.route:
         screen = SelectImageScreen();
         break;
-      case CameraScreen.route:
-        screen = CameraScreen();
-        break;
       case EditorScreen.route:
         final model = arguments['model'];
         screen = MultiBlocProvider(

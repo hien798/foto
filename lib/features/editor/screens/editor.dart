@@ -151,7 +151,6 @@ class _EditorScreenState extends State<EditorScreen> {
         return Stack(
           children: List.generate(_itemViews.length, (index) {
             final e = _itemViews[index];
-            print('Item $index: ${e.key}');
             if (e.type == 1) {
               return StickerItem(
                 key: Key(e.key ?? ''),
@@ -167,15 +166,65 @@ class _EditorScreenState extends State<EditorScreen> {
                 onLongDragEnd: (dt) {
                   _trashCubit.onUpdate(0);
                 },
+                onScaleOffsetUpdated: (model) {
+                  _itemViews[index] = e.copyWith(
+                      scale: model.scale, dx: model.dx, dy: model.dy);
+                },
+              );
+            }
+            // Image
+            if (e.type == 3) {
+              return ImageItem(
+                key: Key(e.key ?? ''),
+                initialScale: e.scale,
+                initialOffset: Offset(e.dx, e.dy),
+                image: e.value,
+                data: e.key,
+                onTap: () {},
+                onLongDragStarted: () {
+                  _trashCubit.onUpdate(1);
+                },
+                onLongDragUpdate: (dt) {},
+                onLongDragEnd: (dt) {
+                  _trashCubit.onUpdate(0);
+                },
+                onScaleOffsetUpdated: (model) {
+                  _itemViews[index] = e.copyWith(
+                      scale: model.scale, dx: model.dx, dy: model.dy);
+                },
               );
             }
             // Text
-            if (e.type == 2) {
-              return StickerItem();
-            }
-            // Image
-            if (e.type == 3) {}
-            return StickerItem(data: e);
+            // if (e.type == 2) {
+            //
+            // }
+            return TextItem(
+              key: Key(e.key ?? ''),
+              initialScale: e.scale,
+              initialOffset: Offset(e.dx, e.dy),
+              text: e.value,
+              data: e.key,
+              onTap: () async {
+                final text =
+                    await TextInputDialog.show<String>(initialText: e.value);
+                if (!text.isNullOrEmpty) {
+                  final items = List<ItemViewModel>.from(_itemViews);
+                  items[index] = e.copyWith(value: text!);
+                  _editorCubit.onUpdateItems(items);
+                }
+              },
+              onLongDragStarted: () {
+                _trashCubit.onUpdate(1);
+              },
+              onLongDragUpdate: (dt) {},
+              onLongDragEnd: (dt) {
+                _trashCubit.onUpdate(0);
+              },
+              onScaleOffsetUpdated: (model) {
+                _itemViews[index] =
+                    e.copyWith(scale: model.scale, dx: model.dx, dy: model.dy);
+              },
+            );
           }),
         );
       },
@@ -271,8 +320,10 @@ class _EditorScreenState extends State<EditorScreen> {
             onAddSticker();
             break;
           case ItemViewType.text:
+            _onAddText();
             break;
           case ItemViewType.image:
+            _onPickImage();
             break;
         }
       },
@@ -289,6 +340,39 @@ class _EditorScreenState extends State<EditorScreen> {
       final stick = ItemViewModel(
         type: 1,
         value: sticker!,
+        scale: 1.0,
+        dx: 100,
+        dy: 100,
+        key: key.toString(),
+      );
+      final items = List<ItemViewModel>.from(_itemViews);
+      items.add(stick);
+      _editorCubit.onUpdateItems(items);
+    }
+  }
+
+  void _onAddText() async {
+    final key = UniqueKey();
+    final stick = ItemViewModel(
+      type: 2,
+      value: 'Text',
+      scale: 1.0,
+      dx: 100,
+      dy: 100,
+      key: key.toString(),
+    );
+    final items = List<ItemViewModel>.from(_itemViews);
+    items.add(stick);
+    _editorCubit.onUpdateItems(items);
+  }
+
+  void _onPickImage() async {
+    final image = await pickImage();
+    if (!image.isNullOrEmpty) {
+      final key = UniqueKey();
+      final stick = ItemViewModel(
+        type: 3,
+        value: image!,
         scale: 1.0,
         dx: 100,
         dy: 100,
