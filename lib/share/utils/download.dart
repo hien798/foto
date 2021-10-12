@@ -28,36 +28,6 @@ Future<File?> urlToFile(String url) async {
   }
 }
 
-Future<void> captureAndSavePng({
-  required GlobalKey key,
-  String? name,
-  int? quality,
-}) async {
-  final locale = AppLocalizations.of(navigatorKey.currentContext!);
-  final _quality = (quality ?? 0) > 0 ? quality! : 100;
-  try {
-    RenderRepaintBoundary? boundary =
-        key.currentContext?.findRenderObject() as RenderRepaintBoundary;
-    var image = await boundary.toImage();
-    ByteData? byteData = await image.toByteData(format: ImageByteFormat.png);
-    Uint8List? pngBytes = byteData?.buffer.asUint8List();
-    if (pngBytes == null) return;
-    final now = DateTime.now().millisecondsSinceEpoch;
-    final ios = Platform.isIOS;
-    final isGranted =
-        await checkPermission(ios ? Permission.photos : Permission.storage);
-    if (!isGranted) return;
-    final result = await ImageGallerySaver.saveImage(pngBytes,
-        quality: _quality, name: name ?? "foto_$now");
-    print('captureAndSavePng: $result');
-    if (result['isSuccess'] == true) {
-      NotifySnackBar.showSuccess(message: '${locale?.text(UI.text_saved)}');
-    }
-  } catch (e) {
-    print(e.toString());
-  }
-}
-
 Future<void> copyToClipboard(String text) {
   final locale = AppLocalizations.of(navigatorKey.currentContext!);
   return Clipboard.setData(ClipboardData(text: text)).then((value) =>

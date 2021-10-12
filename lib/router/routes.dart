@@ -32,13 +32,13 @@ RouteFactory routes(App app) {
         screen = CameraScreen();
         break;
       case EditorScreen.route:
-        final image = arguments['image'];
-        final size = arguments['size'];
+        final model = arguments['model'];
         screen = MultiBlocProvider(
           providers: [
+            BlocProvider(create: (context) => EditorCubit(model)),
             BlocProvider(create: (context) => TrashCubit()),
           ],
-          child: EditorScreen(image, size),
+          child: EditorScreen(),
         );
         break;
       default:

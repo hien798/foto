@@ -1,0 +1,1 @@
+enum ItemViewType {sticker, text, image}

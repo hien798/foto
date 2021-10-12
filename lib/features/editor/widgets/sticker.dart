@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:foto/bloc/bloc.dart';
 import 'package:foto/resources/resource.dart';
+import 'package:foto/share/share.dart';
 import 'package:foto/widgets/widget.dart';
 
 class StickerItem<T extends Object> extends StatefulWidget {
@@ -19,6 +20,8 @@ class StickerItem<T extends Object> extends StatefulWidget {
   final GestureScaleStartCallback? onScaleStart;
   final GestureScaleUpdateCallback? onScaleUpdate;
   final GestureScaleEndCallback? onScaleEnd;
+  final ValueChanged<double>? onScaleUpdated;
+  final Tuple2Changed<double, double>? onOffsetUpdated;
   final T? data;
 
   const StickerItem({
@@ -37,6 +40,8 @@ class StickerItem<T extends Object> extends StatefulWidget {
     this.onScaleStart,
     this.onScaleUpdate,
     this.onScaleEnd,
+    this.onScaleUpdated,
+    this.onOffsetUpdated,
     this.data,
   }) : super(key: key);
 
@@ -46,7 +51,6 @@ class StickerItem<T extends Object> extends StatefulWidget {
 
 class _StickerItemState extends State<StickerItem> {
   String _sticker = Images.sticker_cat_2;
-  Offset _offset = Offset(100, 100);
   late ScaleOffsetCubit _cubit;
 
   @override
@@ -65,8 +69,6 @@ class _StickerItemState extends State<StickerItem> {
     return BlocProvider.value(
       value: _cubit,
       child: EditorItem(
-        initialOffset: widget.initialOffset,
-        initialScale: widget.initialScale,
         child: SizedBox(
           width: 100,
           height: 100,
@@ -82,6 +84,8 @@ class _StickerItemState extends State<StickerItem> {
         onScaleStart: widget.onScaleStart,
         onScaleUpdate: widget.onScaleUpdate,
         onScaleEnd: widget.onScaleEnd,
+        onScaleUpdated: widget.onScaleUpdated,
+        onOffsetUpdated: widget.onOffsetUpdated,
         data: widget.data,
       ),
     );

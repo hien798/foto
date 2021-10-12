@@ -21,9 +21,17 @@ class _$ItemViewModelTearOff {
   const _$ItemViewModelTearOff();
 
   _ItemViewModel call(
-      {required int type, required double dx, required double dy}) {
+      {String? key,
+      required int type,
+      required String value,
+      required double scale,
+      required double dx,
+      required double dy}) {
     return _ItemViewModel(
+      key: key,
       type: type,
+      value: value,
+      scale: scale,
       dx: dx,
       dy: dy,
     );
@@ -39,7 +47,10 @@ const $ItemViewModel = _$ItemViewModelTearOff();
 
 /// @nodoc
 mixin _$ItemViewModel {
+  String? get key => throw _privateConstructorUsedError;
   int get type => throw _privateConstructorUsedError;
+  String get value => throw _privateConstructorUsedError;
+  double get scale => throw _privateConstructorUsedError;
   double get dx => throw _privateConstructorUsedError;
   double get dy => throw _privateConstructorUsedError;
 
@@ -54,7 +65,13 @@ abstract class $ItemViewModelCopyWith<$Res> {
   factory $ItemViewModelCopyWith(
           ItemViewModel value, $Res Function(ItemViewModel) then) =
       _$ItemViewModelCopyWithImpl<$Res>;
-  $Res call({int type, double dx, double dy});
+  $Res call(
+      {String? key,
+      int type,
+      String value,
+      double scale,
+      double dx,
+      double dy});
 }
 
 /// @nodoc
@@ -68,15 +85,30 @@ class _$ItemViewModelCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? key = freezed,
     Object? type = freezed,
+    Object? value = freezed,
+    Object? scale = freezed,
     Object? dx = freezed,
     Object? dy = freezed,
   }) {
     return _then(_value.copyWith(
+      key: key == freezed
+          ? _value.key
+          : key // ignore: cast_nullable_to_non_nullable
+              as String?,
       type: type == freezed
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as int,
+      value: value == freezed
+          ? _value.value
+          : value // ignore: cast_nullable_to_non_nullable
+              as String,
+      scale: scale == freezed
+          ? _value.scale
+          : scale // ignore: cast_nullable_to_non_nullable
+              as double,
       dx: dx == freezed
           ? _value.dx
           : dx // ignore: cast_nullable_to_non_nullable
@@ -96,7 +128,13 @@ abstract class _$ItemViewModelCopyWith<$Res>
           _ItemViewModel value, $Res Function(_ItemViewModel) then) =
       __$ItemViewModelCopyWithImpl<$Res>;
   @override
-  $Res call({int type, double dx, double dy});
+  $Res call(
+      {String? key,
+      int type,
+      String value,
+      double scale,
+      double dx,
+      double dy});
 }
 
 /// @nodoc
@@ -112,15 +150,30 @@ class __$ItemViewModelCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? key = freezed,
     Object? type = freezed,
+    Object? value = freezed,
+    Object? scale = freezed,
     Object? dx = freezed,
     Object? dy = freezed,
   }) {
     return _then(_ItemViewModel(
+      key: key == freezed
+          ? _value.key
+          : key // ignore: cast_nullable_to_non_nullable
+              as String?,
       type: type == freezed
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as int,
+      value: value == freezed
+          ? _value.value
+          : value // ignore: cast_nullable_to_non_nullable
+              as String,
+      scale: scale == freezed
+          ? _value.scale
+          : scale // ignore: cast_nullable_to_non_nullable
+              as double,
       dx: dx == freezed
           ? _value.dx
           : dx // ignore: cast_nullable_to_non_nullable
@@ -137,13 +190,24 @@ class __$ItemViewModelCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_ItemViewModel implements _ItemViewModel {
   const _$_ItemViewModel(
-      {required this.type, required this.dx, required this.dy});
+      {this.key,
+      required this.type,
+      required this.value,
+      required this.scale,
+      required this.dx,
+      required this.dy});
 
   factory _$_ItemViewModel.fromJson(Map<String, dynamic> json) =>
       _$_$_ItemViewModelFromJson(json);
 
   @override
+  final String? key;
+  @override
   final int type;
+  @override
+  final String value;
+  @override
+  final double scale;
   @override
   final double dx;
   @override
@@ -151,15 +215,21 @@ class _$_ItemViewModel implements _ItemViewModel {
 
   @override
   String toString() {
-    return 'ItemViewModel(type: $type, dx: $dx, dy: $dy)';
+    return 'ItemViewModel(key: $key, type: $type, value: $value, scale: $scale, dx: $dx, dy: $dy)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _ItemViewModel &&
+            (identical(other.key, key) ||
+                const DeepCollectionEquality().equals(other.key, key)) &&
             (identical(other.type, type) ||
                 const DeepCollectionEquality().equals(other.type, type)) &&
+            (identical(other.value, value) ||
+                const DeepCollectionEquality().equals(other.value, value)) &&
+            (identical(other.scale, scale) ||
+                const DeepCollectionEquality().equals(other.scale, scale)) &&
             (identical(other.dx, dx) ||
                 const DeepCollectionEquality().equals(other.dx, dx)) &&
             (identical(other.dy, dy) ||
@@ -169,7 +239,10 @@ class _$_ItemViewModel implements _ItemViewModel {
   @override
   int get hashCode =>
       runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(key) ^
       const DeepCollectionEquality().hash(type) ^
+      const DeepCollectionEquality().hash(value) ^
+      const DeepCollectionEquality().hash(scale) ^
       const DeepCollectionEquality().hash(dx) ^
       const DeepCollectionEquality().hash(dy);
 
@@ -186,7 +259,10 @@ class _$_ItemViewModel implements _ItemViewModel {
 
 abstract class _ItemViewModel implements ItemViewModel {
   const factory _ItemViewModel(
-      {required int type,
+      {String? key,
+      required int type,
+      required String value,
+      required double scale,
       required double dx,
       required double dy}) = _$_ItemViewModel;
 
@@ -194,7 +270,13 @@ abstract class _ItemViewModel implements ItemViewModel {
       _$_ItemViewModel.fromJson;
 
   @override
+  String? get key => throw _privateConstructorUsedError;
+  @override
   int get type => throw _privateConstructorUsedError;
+  @override
+  String get value => throw _privateConstructorUsedError;
+  @override
+  double get scale => throw _privateConstructorUsedError;
   @override
   double get dx => throw _privateConstructorUsedError;
   @override

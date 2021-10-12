@@ -9,7 +9,10 @@ part 'item_view_model.g.dart';
 @freezed
 class ItemViewModel with _$ItemViewModel {
   const factory ItemViewModel({
+    String? key,
     required int type,
+    required String value,
+    required double scale,
     required double dx,
     required double dy,
   }) = _ItemViewModel;

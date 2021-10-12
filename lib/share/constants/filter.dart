@@ -1,5 +1,5 @@
-class Filter {
-  Filter._();
+class FilterMatrix {
+  FilterMatrix._();
 
   static const filters = [
     IDENTITY,

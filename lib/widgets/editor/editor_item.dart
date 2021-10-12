@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:foto/bloc/bloc.dart';
+import 'package:foto/share/share.dart';
 
 class EditorItem<T extends Object> extends StatefulWidget {
   final Widget child;
-  final Offset? initialOffset;
-  final double? initialScale;
   final GestureTapCallback? onTap;
   final GestureTapCallback? onDoubleTap;
   final VoidCallback? onLongDragStarted;
@@ -16,13 +15,13 @@ class EditorItem<T extends Object> extends StatefulWidget {
   final GestureScaleStartCallback? onScaleStart;
   final GestureScaleUpdateCallback? onScaleUpdate;
   final GestureScaleEndCallback? onScaleEnd;
+  final ValueChanged<double>? onScaleUpdated;
+  final Tuple2Changed<double, double>? onOffsetUpdated;
   final T? data;
 
   const EditorItem({
     Key? key,
     required this.child,
-    this.initialOffset,
-    this.initialScale,
     this.onTap,
     this.onDoubleTap,
     this.onLongDragStarted,
@@ -33,6 +32,8 @@ class EditorItem<T extends Object> extends StatefulWidget {
     this.onScaleStart,
     this.onScaleUpdate,
     this.onScaleEnd,
+    this.onScaleUpdated,
+    this.onOffsetUpdated,
     this.data,
   }) : super(key: key);
 
@@ -64,11 +65,13 @@ class _EditorItemState extends State<EditorItem> {
             data: widget.data,
             onDragStarted: widget.onLongDragStarted,
             onDragUpdate: (dt) {
+              widget.onLongDragUpdate?.call(dt);
+              widget.onOffsetUpdated
+                  ?.call(state.dx + dt.delta.dx, state.dy + dt.delta.dy);
               _cubit.onUpdate(
                 dx: state.dx + dt.delta.dx,
                 dy: state.dy + dt.delta.dy,
               );
-              widget.onLongDragUpdate?.call(dt);
             },
             onDragEnd: widget.onLongDragEnd,
             onDragCompleted: widget.onLongDragCompleted,
@@ -82,21 +85,37 @@ class _EditorItemState extends State<EditorItem> {
                 widget.onScaleStart?.call(dt);
               },
               onScaleUpdate: (dt) {
+                widget.onScaleUpdate?.call(dt);
+                widget.onScaleUpdated?.call(_initScale * dt.scale);
+                widget.onOffsetUpdated
+                    ?.call(_initDx + dt.delta.dx, _initDy + dt.delta.dy);
                 _cubit.onUpdate(
-                  scale: _initScale*dt.scale,
+                  scale: _initScale * dt.scale,
                   dx: _initDx + dt.delta.dx,
                   dy: _initDy + dt.delta.dy,
                 );
-                widget.onScaleUpdate?.call(dt);
               },
               onScaleEnd: (dt) {
                 widget.onScaleEnd?.call(dt);
               },
               onTap: widget.onTap,
               onDoubleTap: widget.onDoubleTap,
-              child: Transform.scale(
-                scale: state.scale,
-                child: widget.child,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  // Text(
+                  //   '${widget.data}',
+                  //   style: TextStyle(
+                  //     color: Colors.black,
+                  //     fontSize: 20,
+                  //     fontWeight: FontWeight.bold,
+                  //   ),
+                  // ),
+                  Transform.scale(
+                    scale: state.scale,
+                    child: widget.child,
+                  ),
+                ],
               ),
             ),
           ),

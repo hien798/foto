@@ -58,8 +58,6 @@ class _TextItemState extends State<TextItem> {
   @override
   Widget build(BuildContext context) {
     return EditorItem(
-      initialOffset: widget.initialOffset,
-      initialScale: widget.initialScale,
       child: Text(
         _text,
         style: _style,

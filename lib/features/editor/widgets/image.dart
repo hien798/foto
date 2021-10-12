@@ -53,8 +53,6 @@ class _ImageItemState extends State<ImageItem> {
   @override
   Widget build(BuildContext context) {
     return EditorItem(
-      initialOffset: widget.initialOffset,
-      initialScale: widget.initialScale,
       child: SizedBox(
         width: 100,
         height: 100,

@@ -5,26 +5,25 @@ import 'package:foto/widgets/widget.dart';
 
 const double kToolBarHeight = 120.0;
 
-class ToolBar extends StatefulWidget {
-  final List<double> filter;
-  final VoidCallback? onAddSticker;
-  final VoidCallback? onAddText;
-  final ValueChanged<List<double>>? onSelectFilter;
+class EditorToolBar extends StatefulWidget {
+  final Filter filter;
+  final ValueChanged<ItemViewType>? onAddItem;
+  final ValueChanged<Filter>? onSelectFilter;
 
-  const ToolBar({
+  const EditorToolBar({
     Key? key,
     required this.filter,
-    this.onAddSticker,
-    this.onAddText,
+    this.onAddItem,
     this.onSelectFilter,
   }) : super(key: key);
 
   @override
-  _ToolBarState createState() => _ToolBarState();
+  _EditorToolBarState createState() => _EditorToolBarState();
 }
 
-class _ToolBarState extends State<ToolBar> {
+class _EditorToolBarState extends State<EditorToolBar> {
   bool _showFiler = false;
+  bool _showInsert = false;
   final _scrollController = ScrollController();
 
   @override
@@ -38,6 +37,7 @@ class _ToolBarState extends State<ToolBar> {
           children: [
             _buildCommonTools(),
             if (_showFiler) _buildFilter(),
+            if (_showInsert) _buildInsert(),
           ],
         ),
       ),
@@ -46,28 +46,118 @@ class _ToolBarState extends State<ToolBar> {
 
   Widget _buildCommonTools() {
     return SeparatedRow(
+      flexEqual: true,
       children: [
-        TextButton(
-          onPressed: () {
-            widget.onAddSticker?.call();
-          },
-          child: Text('Stick'),
+        Container(
+          height: double.infinity,
+          child: TextButton(
+            onPressed: () {
+              setState(() {
+                _showInsert = true;
+              });
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.add_circle_outline),
+                SizedBox(height: 8),
+                Text('Insert'),
+              ],
+            ),
+          ),
         ),
-        TextButton(
-          onPressed: () {
-            widget.onAddText?.call();
-          },
-          child: Text('Text'),
-        ),
-        TextButton(
-          onPressed: () {
-            setState(() {
-              _showFiler = true;
-            });
-          },
-          child: Text('Filter'),
+        Container(
+          height: double.infinity,
+          child: TextButton(
+            onPressed: () {
+              setState(() {
+                _showFiler = true;
+              });
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.filter),
+                SizedBox(height: 8),
+                Text('Filter'),
+              ],
+            ),
+          ),
         ),
       ],
+    );
+  }
+
+  Widget _buildInsert() {
+    return Container(
+      color: Theme.of(context).backgroundColor,
+      child: Row(
+        children: [
+          Container(
+            height: double.infinity,
+            width: 44,
+            color: Theme.of(context).backgroundColor,
+            child: TextButton(
+              onPressed: () {
+                setState(() {
+                  _showInsert = false;
+                });
+              },
+              child: Icon(Icons.chevron_left),
+            ),
+          ),
+          Expanded(
+            child: SeparatedRow(
+              flexEqual: true,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _buildInsertItem(
+                  title: 'Sticker',
+                  icon: Icons.insert_emoticon,
+                  onPressed: () {
+                    widget.onAddItem?.call(ItemViewType.sticker);
+                  },
+                ),
+                _buildInsertItem(
+                  title: 'Text',
+                  icon: Icons.text_fields,
+                  onPressed: () {
+                    widget.onAddItem?.call(ItemViewType.text);
+                  },
+                ),
+                _buildInsertItem(
+                  title: 'Image',
+                  icon: Icons.image,
+                  onPressed: () {
+                    widget.onAddItem?.call(ItemViewType.image);
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInsertItem({
+    String? title,
+    IconData? icon,
+    VoidCallback? onPressed,
+  }) {
+    return Container(
+      height: double.infinity,
+      child: TextButton(
+        onPressed: () => onPressed?.call(),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon),
+            SizedBox(height: 8),
+            Text(title ?? ''),
+          ],
+        ),
+      ),
     );
   }
 
@@ -93,10 +183,10 @@ class _ToolBarState extends State<ToolBar> {
             child: ListView.separated(
               controller: _scrollController,
               padding: const EdgeInsets.all(8),
-              itemCount: Filter.filters.length,
+              itemCount: Filter.values.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
-                final filter = Filter.filters[index];
+                final filter = Filter.values[index];
                 return _buildImage(
                   filter,
                   isSelected: widget.filter == filter,
@@ -116,7 +206,7 @@ class _ToolBarState extends State<ToolBar> {
   }
 
   Widget _buildImage(
-    List<double> filter, {
+    Filter filter, {
     VoidCallback? onPressed,
     bool? isSelected = false,
   }) {
@@ -136,7 +226,7 @@ class _ToolBarState extends State<ToolBar> {
         child: Stack(
           children: [
             ColorFiltered(
-              colorFilter: ColorFilter.matrix(filter),
+              colorFilter: ColorFilter.matrix(filter.matrix),
               child: AppImage.asset(Images.image_demo),
             ),
             if (isSelected == true)

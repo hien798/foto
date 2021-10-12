@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:foto/features/feature.dart';
+import 'package:foto/models/editor/editor.dart';
 import 'package:foto/share/share.dart';
 import 'package:foto/widgets/widget.dart';
 import 'package:image_picker/image_picker.dart';
@@ -93,13 +94,9 @@ class SelectImageScreen extends StatelessWidget {
   }
 
   void _navigate(String path) async {
-    File file = File(path);
-    var decodedImage = await decodeImageFromList(file.readAsBytesSync());
-    final size =
-        Size(decodedImage.width.toDouble(), decodedImage.height.toDouble());
     Future.delayed(Duration(milliseconds: 500), () {
-      pushReplacementNamed(EditorScreen.route,
-          arguments: {'image': path, 'size': size});
+      final EditorModel model = EditorModel(image: path);
+      pushReplacementNamed(EditorScreen.route, arguments: {'model': model});
     });
   }
 
