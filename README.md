@@ -20,3 +20,5 @@ I so busy so i can't completed all features.
 - Long Press Drag to delete item.
 - Add image from gallery & camera
 - Save and delete project
+
+# [APK download](https://https://github.com/hien798/foto/blob/master/apk/foto_release_1.0.0+1.apk?raw=true)
