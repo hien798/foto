@@ -6,7 +6,7 @@ import 'package:foto/share/share.dart';
 import 'package:foto/widgets/widget.dart';
 
 class StickerItem<T extends Object> extends StatefulWidget {
-  final String? initialSticker;
+  final String? sticker;
   final Offset? initialOffset;
   final double? initialScale;
   final ValueChanged<String>? onChanged;
@@ -26,7 +26,7 @@ class StickerItem<T extends Object> extends StatefulWidget {
 
   const StickerItem({
     Key? key,
-    this.initialSticker,
+    this.sticker,
     this.initialOffset,
     this.initialScale,
     this.onChanged,
@@ -50,12 +50,10 @@ class StickerItem<T extends Object> extends StatefulWidget {
 }
 
 class _StickerItemState extends State<StickerItem> {
-  String _sticker = Images.sticker_cat_2;
   late ScaleOffsetCubit _cubit;
 
   @override
   void initState() {
-    _sticker = widget.initialSticker ?? Images.sticker_cat_2;
     _cubit = ScaleOffsetCubit(
       widget.initialScale,
       widget.initialOffset?.dx,
@@ -72,7 +70,7 @@ class _StickerItemState extends State<StickerItem> {
         child: SizedBox(
           width: 100,
           height: 100,
-          child: AppImage.asset(_sticker, width: 100, height: 100),
+          child: AppImage.asset(widget.sticker ?? Images.sticker_cat_2, width: 100, height: 100),
         ),
         onTap: widget.onTap,
         onDoubleTap: widget.onDoubleTap,

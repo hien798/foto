@@ -21,11 +21,17 @@ class _$EditorModelTearOff {
   const _$EditorModelTearOff();
 
   _EditorModel call(
-      {required String image, String? filter, List<ItemViewModel>? items}) {
+      {required String image,
+      String? filter,
+      List<ItemViewModel>? items,
+      DateTime? createTime,
+      DateTime? updateTime}) {
     return _EditorModel(
       image: image,
       filter: filter,
       items: items,
+      createTime: createTime,
+      updateTime: updateTime,
     );
   }
 
@@ -42,6 +48,8 @@ mixin _$EditorModel {
   String get image => throw _privateConstructorUsedError;
   String? get filter => throw _privateConstructorUsedError;
   List<ItemViewModel>? get items => throw _privateConstructorUsedError;
+  DateTime? get createTime => throw _privateConstructorUsedError;
+  DateTime? get updateTime => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -54,7 +62,12 @@ abstract class $EditorModelCopyWith<$Res> {
   factory $EditorModelCopyWith(
           EditorModel value, $Res Function(EditorModel) then) =
       _$EditorModelCopyWithImpl<$Res>;
-  $Res call({String image, String? filter, List<ItemViewModel>? items});
+  $Res call(
+      {String image,
+      String? filter,
+      List<ItemViewModel>? items,
+      DateTime? createTime,
+      DateTime? updateTime});
 }
 
 /// @nodoc
@@ -70,6 +83,8 @@ class _$EditorModelCopyWithImpl<$Res> implements $EditorModelCopyWith<$Res> {
     Object? image = freezed,
     Object? filter = freezed,
     Object? items = freezed,
+    Object? createTime = freezed,
+    Object? updateTime = freezed,
   }) {
     return _then(_value.copyWith(
       image: image == freezed
@@ -84,6 +99,14 @@ class _$EditorModelCopyWithImpl<$Res> implements $EditorModelCopyWith<$Res> {
           ? _value.items
           : items // ignore: cast_nullable_to_non_nullable
               as List<ItemViewModel>?,
+      createTime: createTime == freezed
+          ? _value.createTime
+          : createTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      updateTime: updateTime == freezed
+          ? _value.updateTime
+          : updateTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 }
@@ -95,7 +118,12 @@ abstract class _$EditorModelCopyWith<$Res>
           _EditorModel value, $Res Function(_EditorModel) then) =
       __$EditorModelCopyWithImpl<$Res>;
   @override
-  $Res call({String image, String? filter, List<ItemViewModel>? items});
+  $Res call(
+      {String image,
+      String? filter,
+      List<ItemViewModel>? items,
+      DateTime? createTime,
+      DateTime? updateTime});
 }
 
 /// @nodoc
@@ -113,6 +141,8 @@ class __$EditorModelCopyWithImpl<$Res> extends _$EditorModelCopyWithImpl<$Res>
     Object? image = freezed,
     Object? filter = freezed,
     Object? items = freezed,
+    Object? createTime = freezed,
+    Object? updateTime = freezed,
   }) {
     return _then(_EditorModel(
       image: image == freezed
@@ -127,6 +157,14 @@ class __$EditorModelCopyWithImpl<$Res> extends _$EditorModelCopyWithImpl<$Res>
           ? _value.items
           : items // ignore: cast_nullable_to_non_nullable
               as List<ItemViewModel>?,
+      createTime: createTime == freezed
+          ? _value.createTime
+          : createTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      updateTime: updateTime == freezed
+          ? _value.updateTime
+          : updateTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 }
@@ -134,7 +172,12 @@ class __$EditorModelCopyWithImpl<$Res> extends _$EditorModelCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_EditorModel implements _EditorModel {
-  const _$_EditorModel({required this.image, this.filter, this.items});
+  const _$_EditorModel(
+      {required this.image,
+      this.filter,
+      this.items,
+      this.createTime,
+      this.updateTime});
 
   factory _$_EditorModel.fromJson(Map<String, dynamic> json) =>
       _$_$_EditorModelFromJson(json);
@@ -145,10 +188,14 @@ class _$_EditorModel implements _EditorModel {
   final String? filter;
   @override
   final List<ItemViewModel>? items;
+  @override
+  final DateTime? createTime;
+  @override
+  final DateTime? updateTime;
 
   @override
   String toString() {
-    return 'EditorModel(image: $image, filter: $filter, items: $items)';
+    return 'EditorModel(image: $image, filter: $filter, items: $items, createTime: $createTime, updateTime: $updateTime)';
   }
 
   @override
@@ -160,7 +207,13 @@ class _$_EditorModel implements _EditorModel {
             (identical(other.filter, filter) ||
                 const DeepCollectionEquality().equals(other.filter, filter)) &&
             (identical(other.items, items) ||
-                const DeepCollectionEquality().equals(other.items, items)));
+                const DeepCollectionEquality().equals(other.items, items)) &&
+            (identical(other.createTime, createTime) ||
+                const DeepCollectionEquality()
+                    .equals(other.createTime, createTime)) &&
+            (identical(other.updateTime, updateTime) ||
+                const DeepCollectionEquality()
+                    .equals(other.updateTime, updateTime)));
   }
 
   @override
@@ -168,7 +221,9 @@ class _$_EditorModel implements _EditorModel {
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(image) ^
       const DeepCollectionEquality().hash(filter) ^
-      const DeepCollectionEquality().hash(items);
+      const DeepCollectionEquality().hash(items) ^
+      const DeepCollectionEquality().hash(createTime) ^
+      const DeepCollectionEquality().hash(updateTime);
 
   @JsonKey(ignore: true)
   @override
@@ -185,7 +240,9 @@ abstract class _EditorModel implements EditorModel {
   const factory _EditorModel(
       {required String image,
       String? filter,
-      List<ItemViewModel>? items}) = _$_EditorModel;
+      List<ItemViewModel>? items,
+      DateTime? createTime,
+      DateTime? updateTime}) = _$_EditorModel;
 
   factory _EditorModel.fromJson(Map<String, dynamic> json) =
       _$_EditorModel.fromJson;
@@ -196,6 +253,10 @@ abstract class _EditorModel implements EditorModel {
   String? get filter => throw _privateConstructorUsedError;
   @override
   List<ItemViewModel>? get items => throw _privateConstructorUsedError;
+  @override
+  DateTime? get createTime => throw _privateConstructorUsedError;
+  @override
+  DateTime? get updateTime => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$EditorModelCopyWith<_EditorModel> get copyWith =>

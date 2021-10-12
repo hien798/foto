@@ -12,6 +12,8 @@ class EditorModel with _$EditorModel {
     required String image,
     String? filter,
     List<ItemViewModel>? items,
+    DateTime? createTime,
+    DateTime? updateTime,
   }) = _EditorModel;
 
   factory EditorModel.fromJson(Map<String, dynamic> json) =>

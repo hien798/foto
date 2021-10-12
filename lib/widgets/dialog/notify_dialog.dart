@@ -31,7 +31,7 @@ class NotifyDialog extends StatelessWidget {
       builder: (context) => NotifyDialog(
         title: Text(
           title ?? '',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black),
           textAlign: TextAlign.center,
         ),
         content: Text(

@@ -22,8 +22,13 @@ class EditorScreen extends StatefulWidget {
 
 class _EditorScreenState extends State<EditorScreen> {
   List<ItemViewModel> _itemViews = [];
+  String _image = '';
+  double _ratio = 2 / 3;
+  Filter _filter = Filter.IDENTITY;
   late TrashCubit _trashCubit;
   late EditorCubit _editorCubit;
+  late ProjectCubit _projectCubit;
+  final _imageKey = GlobalKey();
 
   @override
   void initState() {
@@ -34,75 +39,103 @@ class _EditorScreenState extends State<EditorScreen> {
   void didChangeDependencies() {
     _trashCubit = BlocProvider.of<TrashCubit>(context);
     _editorCubit = BlocProvider.of<EditorCubit>(context);
+    _projectCubit = BlocProvider.of<ProjectCubit>(context);
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BaseLayout(
-      style: LayoutStyle.light,
-      child: BlocBuilder<EditorCubit, EditorState>(
-        buildWhen: (p, c) => c is FilterLoaded,
-        builder: (context, state) {
-          Filter filter = Filter.IDENTITY;
-          if (state is FilterLoaded) {
-            filter = FilterEx.fromText(state.filter);
-          }
-          return Column(
-            children: [
-              CommonAppBar(title: 'Photo Editor'),
-              Expanded(
-                child: InteractiveViewer(
-                  maxScale: 3,
-                  minScale: 0.2,
-                  child: Stack(
-                    children: [
-                      Positioned.fill(
-                          child: Container(
-                        color: Colors.black,
-                      )),
-                      Align(
-                        alignment: Alignment.center,
-                        child: BlocBuilder<EditorCubit, EditorState>(
-                          buildWhen: (p, c) => c is ImageLoaded,
-                          builder: (context, state) {
-                            double ratio = 2 / 3;
-                            File? file;
-                            if (state is ImageLoaded) {
-                              ratio = state.ratio ?? 2 / 3;
-                              file = File(state.image);
-                            }
-                            return AspectRatio(
-                              aspectRatio: ratio,
-                              child: ColorFiltered(
-                                colorFilter: ColorFilter.matrix(filter.matrix),
-                                child: Stack(
-                                  children: [
-                                    Positioned.fill(
-                                      child: file != null
-                                          ? Image.file(
-                                              file,
-                                              fit: BoxFit.cover,
-                                            )
-                                          : Container(color: Colors.white),
+    return WillPopScope(
+      onWillPop: () async {
+        _saveProject();
+        return true;
+      },
+      child: BaseLayout(
+        style: LayoutStyle.light,
+        child: BlocBuilder<EditorCubit, EditorState>(
+          buildWhen: (p, c) => c is FilterLoaded,
+          builder: (context, state) {
+            if (state is FilterLoaded) {
+              _filter = FilterEx.fromText(state.filter);
+            }
+            return Column(
+              children: [
+                CommonAppBar(
+                  title: 'Photo Editor',
+                  onBack: () {
+                    _saveProject();
+                    pop();
+                  },
+                  actions: [
+                    IconButton(
+                      onPressed: () {
+                        _saveProject();
+                      },
+                      icon: Icon(Icons.save_outlined),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        captureAndSavePng(key: _imageKey);
+                      },
+                      icon: Icon(Icons.save_alt),
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: InteractiveViewer(
+                    maxScale: 3,
+                    minScale: 0.2,
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+                            child: Container(
+                          color: Colors.black,
+                        )),
+                        Align(
+                          alignment: Alignment.center,
+                          child: BlocBuilder<EditorCubit, EditorState>(
+                            buildWhen: (p, c) => c is ImageLoaded,
+                            builder: (context, state) {
+                              if (state is ImageLoaded) {
+                                _ratio = state.ratio ?? 2 / 3;
+                                _image = state.image;
+                              }
+                              return RepaintBoundary(
+                                key: _imageKey,
+                                child: AspectRatio(
+                                  aspectRatio: _ratio,
+                                  child: ColorFiltered(
+                                    colorFilter:
+                                        ColorFilter.matrix(_filter.matrix),
+                                    child: Stack(
+                                      children: [
+                                        Positioned.fill(
+                                          child: !_image.isNullOrEmpty
+                                              ? Image.file(
+                                                  File(_image),
+                                                  fit: BoxFit.cover,
+                                                )
+                                              : Container(color: Colors.white),
+                                        ),
+                                        _buildItemView(),
+                                        _buildTrash(),
+                                      ],
                                     ),
-                                    _buildItemView(),
-                                    _buildTrash(),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              _buildToolBar(filter),
-            ],
-          );
-        },
+                _buildToolBar(_filter),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -124,7 +157,7 @@ class _EditorScreenState extends State<EditorScreen> {
                 key: Key(e.key ?? ''),
                 initialScale: e.scale,
                 initialOffset: Offset(e.dx, e.dy),
-                initialSticker: e.value,
+                sticker: e.value,
                 data: e.key,
                 onTap: () {},
                 onLongDragStarted: () {
@@ -265,5 +298,13 @@ class _EditorScreenState extends State<EditorScreen> {
       items.add(stick);
       _editorCubit.onUpdateItems(items);
     }
+  }
+
+  _saveProject() {
+    _projectCubit.onSaveProject(_editorCubit.model.copyWith(
+      filter: _filter.text,
+      items: _itemViews,
+      updateTime: DateTime.now(),
+    ));
   }
 }

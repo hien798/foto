@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import '../../../share/share.dart';
 import '../../models/model.dart';
@@ -20,5 +21,20 @@ class UserRepository {
 
   Future updateSetting(AppSettingModel model) async {
     userStorage.updateSetting(model);
+  }
+
+  Future<List<EditorModel>?> loadProjects() async {
+    final json = await userStorage.loadProjects();
+    if (json.isNullOrEmpty) return null;
+    final data = jsonDecode(json!)
+        .cast<Map<String, dynamic>>()
+        .map<EditorModel>((js) => EditorModel.fromJson(js))
+        .toList();
+    return data;
+  }
+
+  void saveProject(List<EditorModel> projects) async {
+    final json = jsonEncode(projects);
+    userStorage.saveProject(json);
   }
 }

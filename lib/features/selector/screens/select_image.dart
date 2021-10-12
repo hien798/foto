@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:foto/bloc/bloc.dart';
 import 'package:foto/features/feature.dart';
 import 'package:foto/models/editor/editor.dart';
 import 'package:foto/share/share.dart';
@@ -33,7 +35,7 @@ class SelectImageScreen extends StatelessWidget {
                           onPressed: () async {
                             final path = await _takePhoto();
                             if (!path.isNullOrEmpty) {
-                              _navigate(path!);
+                              _navigate(context, path!);
                             }
                           },
                           child: Column(
@@ -62,7 +64,7 @@ class SelectImageScreen extends StatelessWidget {
                           onPressed: () async {
                             final path = await _pickImage();
                             if (!path.isNullOrEmpty) {
-                              _navigate(path!);
+                              _navigate(context, path!);
                             }
                           },
                           child: Column(
@@ -93,9 +95,15 @@ class SelectImageScreen extends StatelessWidget {
     );
   }
 
-  void _navigate(String path) async {
+  void _navigate(BuildContext context, String path) async {
+    final now = DateTime.now();
+    final EditorModel model = EditorModel(
+      image: path,
+      createTime: now,
+      updateTime: now,
+    );
+    BlocProvider.of<ProjectCubit>(context).onAddProject(model);
     Future.delayed(Duration(milliseconds: 500), () {
-      final EditorModel model = EditorModel(image: path);
       pushReplacementNamed(EditorScreen.route, arguments: {'model': model});
     });
   }

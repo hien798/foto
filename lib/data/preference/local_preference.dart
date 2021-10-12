@@ -32,4 +32,12 @@ class UserLocalStorage {
   void _scheduleSave(String key, String value) {
     _storage.write(key: key, value: value);
   }
+
+  Future<String?> loadProjects() async {
+    return await _storage.read(key: 'projects');
+  }
+
+  void saveProject(String json) async {
+    _scheduleSave('projects', json);
+  }
 }

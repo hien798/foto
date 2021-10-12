@@ -35,7 +35,9 @@ RouteFactory routes(App app) {
         final model = arguments['model'];
         screen = MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => EditorCubit(model)),
+            BlocProvider(
+                create: (context) =>
+                    EditorCubit(repo: app.userRepository, model: model)),
             BlocProvider(create: (context) => TrashCubit()),
           ],
           child: EditorScreen(),

@@ -5,6 +5,9 @@ class App {
   AppCubit get appCubit => _appCubit;
   late AppCubit _appCubit;
 
+  ProjectCubit get projectCubit => _projectCubit;
+  late ProjectCubit _projectCubit;
+
   UserRepository get userRepository => _userRepository;
   late UserRepository _userRepository;
 
@@ -32,5 +35,6 @@ class App {
 
   Future<void> _setupBlocs() async {
     _appCubit = AppCubit(_userRepository);
+    _projectCubit = ProjectCubit(_userRepository);
   }
 }

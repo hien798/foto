@@ -27,6 +27,7 @@ void main() async {
       child: MultiBlocProvider(
         providers: [
           BlocProvider<AppCubit>.value(value: app.appCubit),
+          BlocProvider<ProjectCubit>.value(value: app.projectCubit),
         ],
         child: MyApp(app: app),
       ),
