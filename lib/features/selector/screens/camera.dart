@@ -1,10 +1,10 @@
+
 import 'package:camerawesome/camerawesome_plugin.dart';
 import 'package:camerawesome/models/orientations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../../../features/feature.dart';
 import '../../../../widgets/widget.dart';
-import '../../../../share/share.dart';
-import '../selector.dart';
 
 class CameraScreen extends StatefulWidget {
   static const String route = 'camera';
@@ -20,7 +20,6 @@ class _CameraScreenState extends State<CameraScreen>
   @override
   void initState() {
     super.initState();
-    WidgetsFlutterBinding.ensureInitialized();
     _initCamera();
   }
 
@@ -31,6 +30,7 @@ class _CameraScreenState extends State<CameraScreen>
     _captureMode.dispose();
     _sensor.dispose();
     _orientation.dispose();
+
     super.dispose();
   }
 
@@ -51,8 +51,8 @@ class _CameraScreenState extends State<CameraScreen>
     );
   }
 
-  ValueNotifier<Size> _photoSize = ValueNotifier(Size(1920, 1080));
-  ValueNotifier<Sensors> _sensor = ValueNotifier(Sensors.BACK);
+  ValueNotifier<Size> _photoSize = ValueNotifier(Size(720, 1080));
+  ValueNotifier<Sensors> _sensor = ValueNotifier(Sensors.FRONT);
   ValueNotifier<CaptureModes> _captureMode = ValueNotifier(CaptureModes.PHOTO);
   ValueNotifier<CameraOrientations> _orientation =
   ValueNotifier(CameraOrientations.PORTRAIT_UP);
@@ -75,7 +75,7 @@ class _CameraScreenState extends State<CameraScreen>
             sensor: _sensor,
             orientation: DeviceOrientation.portraitUp,
             selectDefaultSize: (List<Size> availableSizes) {
-              return Size(1920, 1080);
+              return Size(1080, 720);
             },
           ),
           _buildPreview(),

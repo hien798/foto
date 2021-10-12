@@ -135,6 +135,8 @@ class SelectImageScreen extends StatelessWidget {
   }
 
   Future<String?> _takePhoto() async {
+    final permission = await checkPermission(Permission.camera);
+    if (!permission) return null;
     final rs = await pushNamed(CameraScreen.route);
     return rs as String?;
   }

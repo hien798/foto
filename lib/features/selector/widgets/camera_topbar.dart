@@ -26,6 +26,8 @@ class CameraTopBar extends StatelessWidget {
                 ),
                 style: TextButton.styleFrom(
                   primary: Colors.white,
+                  backgroundColor: Colors.black12,
+                  shape: CircleBorder(),
                 ),
               ),
             ],
